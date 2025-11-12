@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniChat</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Minecraft pixel font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+
+    <script>
+        // Tailwind config to add custom font
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        minecraft: ['"Press Start 2P"', 'monospace'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-800 font-minecraft text-white flex flex-col min-h-screen">
+    <div class="h-screen w-screen flex flex-col items-center justify-center">
+        <h2 class="text-2xl font-bold text-center mb-6">Login / Signup</h2>
+
+        <div class="mb-4">
+            <input type="email" id="email" placeholder="Email" class="text-black w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <div class="mb-6">
+            <input type="password" id="password" placeholder="Password" class="text-black w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <div class="flex justify-between">
+            <button id = "signupButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">Sign Up</button>
+            <button id="loginButton" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">Log In</button>
+        </div>
+
+        <p id="user-status" class="mt-4 text-center text-gray-600"></p>
+    </div>
+
+  <!-- Firebase SDK -->
+<script type="module">
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged, 
+    sendEmailVerification
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBdbQPjN8131dX0Jr64GmfC5TKoYVEREUg",
+    authDomain: "uni-ai-login.firebaseapp.com",
+    projectId: "uni-ai-login",
+    storageBucket: "uni-ai-login.firebasestorage.app",
+    messagingSenderId: "289687866247",
+    appId: "1:289687866247:web:e9cedfcee8ba173a37a122"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+
+  async function signup() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    try {
+      const userCredentials =await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+      await sendEmailVerification(user);
+      document.getElementById('user-status').innerText = "Please Verify you emial (Check Spam)";
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+
+  async function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const userC = await signInWithEmailAndPassword(auth, email, password);
+      const user = userC.user;
+      window.user = user
+      if(user.emailVerified){
+        document.getElementById('user-status').innerText = "Emial Verified Click Login";
+        document.getElementById('user-status').innerText = "Logged in!";
+        document.querySelector('.h-screen.w-screen').classList.add('hidden'); 
+        document.querySelector('.hidden.flex.flex-col.flex-grow').classList.remove('hidden');
+      }
+      else{
+        document.getElementById('user-status').innerText = "Please verify the email";
+      }
+      
+
+  
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  document.getElementById('signupButton').addEventListener('click', signup);
+  document.getElementById('loginButton').addEventListener('click', login);
+
+
+  
+</script>
+
+
+
+
+
+    <div id = "container"class="hidden flex flex-col flex-grow w-full bg-gray-900 rounded-none shadow-lg">
+
+        <div id="chatBox" class="flex flex-col flex-grow p-4 space-y-2 overflow-y-auto h-[80vh]">
+
+        </div>
+
+
+        <div id="main" class="flex p-2 bg-green-700 sticky bottom-0">
+            <input id="Message" type="text" placeholder="Type your message..."
+                class="flex-1 p-2 bg-green-300 text-black font-minecraft focus:outline-none">
+            <button id="submit_button"
+                class="bg-gray-900 text-white px-4 ml-2 font-minecraft border-2 border-gray-900 hover:bg-gray-700 transition-colors">
+                Send
+            </button>
+        </div>
+    </div>
+    <div id = "pay" class = "hidden">
+      <button id = "Paying">Pay to continue</button>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
