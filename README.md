@@ -1,4 +1,4 @@
-Project Skills Overview
+**Project Skills Developed Overview**
 
 **Full Stack**                                                                                      
 █████████████████████████████████████████████████ 90% 
@@ -19,7 +19,7 @@ Project Skills Overview
 ███████████████████████████████████████████████ 86% 
 
 
-Tech Skills Overview
+**Tech Skills Developed Overview**
 
 **Python**  
 ████████████████████████████████████████████████████ 100% 
